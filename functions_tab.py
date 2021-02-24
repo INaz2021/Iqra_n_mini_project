@@ -5,7 +5,7 @@ import os
 
 #CLEAR FUNCTION
 def clear():
-    os.system('cls')
+    os.system('clear')
 
 #CONNECTION
 mydb = mysql.connector.connect(
@@ -38,7 +38,7 @@ def read_orders():
     mycursor = mydb.cursor()
     mycursor.execute("SELECT * FROM orders")
     file = mycursor.fetchall()
-    print(tabulate(file, headers=["Order_ID","Customer_Name", "Customer_Address", "Customer_Number","Order_Status","Items","Courier"],   tablefmt='pretty'))    
+    print(tabulate(file, headers=["Order_ID","Customer_Name", "Customer_Address", "Customer_Number","Order_Status","Courier"],   tablefmt='pretty'))    
 
 
 #PRODUCT MENU

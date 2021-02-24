@@ -5,9 +5,7 @@ clear()
 while True:
     main_menu()
     value = int(input("Enter number from Main Menu  0 | 1 | 2 | 3     "))
-    if value >= 4:
-        raise Exception("Please Enter Number 0-3")
-
+    
 
 
 #EXIT
@@ -17,6 +15,7 @@ while True:
 
 #PRODUCT
     elif value == 1:
+        clear()
         product_menu()
     
         while True:
@@ -24,6 +23,7 @@ while True:
 
     #RETURN TO MAIN MENU
             if value == 0:
+                clear()
                 break
 
     #PRODUCT PRINT
@@ -32,8 +32,11 @@ while True:
 
 
 
+
     #PRODUCT ADD
             elif value == 2:
+                clear()
+                product_menu()
                 mycursor = mydb.cursor()
                 sql = "INSERT INTO product (product_name, product_price) VALUES (%s, %s)"
                 val = (str(input('Enter Product Name:    ')), float(input('Enter Product Price:    ')))
@@ -43,6 +46,8 @@ while True:
 
     #PRODUCT UPDATE
             elif value == 3:
+                clear()
+                product_menu()
                 mycursor = mydb.cursor()
                 prod_id=int(input('Enter Product ID to Update or 0 to Cancel:    '))
                 if prod_id == 0:
@@ -79,6 +84,8 @@ while True:
 
     #PRODUCT DELETE
             elif value == 4:
+                clear()
+                product_menu()
                 del_value = int(input('Enter 0 to Exit Or 1 to Delete Product :     '))
                 if del_value == 0:
                     exit
@@ -96,7 +103,8 @@ while True:
 #COURIER  
     
     elif value == 2:
-        courier_menu()  
+        clear()
+        courier_menu()
 
         while True:
 
@@ -104,20 +112,24 @@ while True:
 
     #RETURN TO MAIN MENU
             if value == 0:
+                clear()
                 break
 
 
     #COURIER PRINT
             elif value == 1:
+                clear()
                 read_courier()
 
 
 
     #COURIER ADD
             elif value == 2:
+                clear()
+                courier_menu()
                 mycursor = mydb.cursor()
                 sql = "INSERT INTO courier (courier_name, courier_contact) VALUES (%s, %s)"
-                val = (str(input('Enter Courier Name:    ')), int(input('Enter Courier Contact:    ')))
+                val = (str(input('Enter Courier Name:    ')), str(input('Enter Courier Contact:    ')))
                 mycursor.execute(sql, val)
                 print('Row added successfully')  
 
@@ -125,6 +137,7 @@ while True:
 
     #COURIER UPDATE
             elif value == 3:
+                clear()
                 mycursor = mydb.cursor()
                 cour_id=int(input('Enter Courier Id to Update or 0 to Cancel:    '))
                 if cour_id == 0:
@@ -160,6 +173,8 @@ while True:
 
     #COURIER DELETE
             elif value == 4:
+                clear()
+                courier_menu()
                 del_value = int(input('Enter 0 to Exit Or 1 to Delete Courier :     '))
                 if del_value == 0:
                     exit
@@ -177,14 +192,16 @@ while True:
 
 #ORDER
     elif value == 3:
+        clear()
         order_menu()
 
         while True:
 
-            value = int(input("Enter number from Orders Menu:     "))
+            value = int(input("Enter number from Orders Menu: 0:Exit  1:Print  2:Add   3:Update Order_Status  4:Delete  5:Update Order      "))
 
     #RETURN TO MAIN MENU            
             if value == 0:
+                clear()
                 break
 
 
@@ -196,11 +213,13 @@ while True:
 
     #ORDER ADD
             elif value == 2:
+                clear()
+                order_menu()
                 mycursor = mydb.cursor()
                 
                 name = str(input("Enter Name of Customer:     "))
                 address = str(input("Enter Address of Customer:     "))
-                phone = int(input("Enter Contact Detail of Customer:     "))
+                phone = str(input("Enter Contact Detail of Customer:     "))
 
                 value= str(input("Press Enter to cancel and 1 to Add Courier:    "))    
                 if(len(value)) == 0:
@@ -208,14 +227,15 @@ while True:
                 elif (len(value)) == 1:
                     read_courier()
                     cou_id = int(input("Enter Courier Id:     "))
-                    if cou_id >= 6:
-                        raise Exception ("Invalid ID Entered")
-                    
+                    # if cou_id >=10:
+                    #     print('You Entered Invalid Id')
+                    #     break
                     sql =  "INSERT into orders (customer_name, customer_address, customer_contact, courier) values (%s,%s,%s,%s)"
                     val = (name, address, phone, cou_id)
                     mycursor.execute(sql, val)
 
                 #product id
+                read_product()
                 sql1 = "SELECT max(order_id) from orders"
                 mycursor.execute(sql1)
                 last_orderid = mycursor.fetchall()
@@ -242,6 +262,8 @@ while True:
 
         #ORDER UPDATE STATUS
             elif value == 3:
+                clear()
+                order_menu()
                 mycursor = mydb.cursor()
                 Status_list =['Ready to Pick','On the way','Delivered']
                 ord_id=int(input('Enter Order ID to Update Order Status or 0 to Cancel :    '))
@@ -266,6 +288,8 @@ while True:
 
         #ORDER DELETE
             elif value == 4:
+                clear()
+                order_menu()
                 del_value = int(input('Enter 0 to Exit Or 1 to Delete Order :     '))
                 if del_value == 0:
                     exit
@@ -281,6 +305,8 @@ while True:
 
     #ORDER UPDATE EACH PROPERTY
             elif value == 5:
+                clear()
+                order_menu()
                 mycursor = mydb.cursor()
                 ord_id=int(input('Enter Order Id to Update or 0 to Cancel:    '))
                 if ord_id == 0:
@@ -331,15 +357,20 @@ while True:
                     mycursor.execute(sql, val)  
                     print('Order Status updated')
 
-                # #items
-                print("Press Enter to SKIP or Enter 1 to Update Items:")
-                items = [int(x) for x in input().split()]
-                sql = "DELETE from order_product where order_id = %s"
-                mycursor.execute(sql, (ord_id,))
-                for i in range(len(items)):
-                    val= [ord_id,items[i]]
-                    sql3 = "INSERT into order_product (order_id,product_id) values (%s,%s)"
-                    mycursor.execute(sql3,val)
+                #items
+                value = str(input("Press Enter to SKIP or Enter 1 to Update Items:    "))
+                if (len(value)) == 0:
+                    print('Items')
+                elif (len(value)) != 0:
+                    print("Press Enter Product Id")
+                    items = [int(x) for x in input().split()]
+                    sql = "DELETE from order_product where order_id = %s"
+                    mycursor.execute(sql, (ord_id,))
+                    for i in range(len(items)):
+                        val= [ord_id,items[i]]
+                        sql3 = "INSERT into order_product (order_id,product_id) values (%s,%s)"
+                        mycursor.execute(sql3,val)
+                        print('Items updated')
 
 
                 #courier
@@ -355,3 +386,7 @@ while True:
             
             else:
                 print('You Enter Invalid Number')
+
+    else:
+        print('You Entered Invalid Value')
+        break            
